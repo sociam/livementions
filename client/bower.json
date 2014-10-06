@@ -1,0 +1,23 @@
+{
+  "name": "livementions-client",
+  "version": "1.0.0",
+  "homepage": "https://github.com/sociam/livementions",
+  "authors": [
+    "Dr. Daniel A Smith <daniel@danielsmith.eu>"
+  ],
+  "description": "livementions",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.2.26",
+    "jquery": "~2.1.1",
+    "underscore": "~1.7.0"
+  }
+}
