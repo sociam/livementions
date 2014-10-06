@@ -1,0 +1,46 @@
+<html>
+<head>
+<script type="text/javascript">
+var webPush = function(args){
+  var wp = {
+    init      : function(){
+          this.ul =  window.document.getElementById(args.id);
+          this.lastScript = null
+    },
+    addLi          : function(content){
+          var newli       = document.createElement('li');
+          newli.innerHTML = content;
+          this.ul.appendChild(newli);
+          this.ul.scrollTop = this.ul.scrollHeight;
+                  this.removeScript()
+    },
+    scriptsCount  : function(){
+          scriptsL  = window.document.getElementsByTagName('SCRIPT');
+          this.lastScript = scriptsL[ scriptsL.length - 1 ]
+          return scriptsL.length
+    },
+    removeScript  : function(){
+                  this.scriptsCount();
+          if (this.lastScript)
+            this.lastScript.parentNode.removeChild(this.lastScript)
+    }
+  };
+ 
+  wp.init();
+  return wp
+};
+ 
+var pushHandler;
+</script>
+</head>
+<body>
+    <ul id="log">
+    </ul>
+    <script type="text/javascript">
+        /* INIT */
+        pushHandler = webPush({id: 'log'});
+        pushHandler.addLi('Log started')
+        /* This script will remove itself */
+    </script>
+</body>
+</html>
