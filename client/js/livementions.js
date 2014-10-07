@@ -83,14 +83,20 @@ angular.module('ng-livementions', ['btford.socket-io'])
                       .attr("class", "axis")
                       .call(context.axis().orient("top"));
 
+                  var colors = [];
+                  d3.scale.category20b().range().map(function(item) { colors.push(item); });
+                  d3.scale.category20c().range().map(function(item) { colors.push(item); });
+
+//                  var colors = ["#ffccff","#ff99ff","#ff66ff","#ff00ff","#ff0099","#cc0099","#990066","#660066","#666699","#ccccff","#9999ff","#9966ff","#9933ff","#9900cc","#663399","#660099","#330066","#9999cc","#99ccff","#66ccff","#3399ff","#3366ff","#0000ff","#0000cc","#000099","#000066","#cccc99","#ccffff","#99ffff","#00ffff","#00ccff","#0099ff","#0066ff","#0033ff","#003399","#cccccc","#99ffcc","#66ffcc","#66cccc","#00cccc","#009999","#006666","#336666","#003333","#ccffcc","#99ff99","#66ff66","#00ff00","#00cc00","#009900","#006600","#003300","#ffffcc","#ffff99","#ffff66","#ffff33","#ffff00","#ffcc00","#cc9900","#996633","#ffcc99","#ff9966","#ff6633","#ff6600","#ff3300","#cc3300","#993300","#663300","#ffcccc","#ff9999","#ff6666","#cc3333","#ff0000","#cc0000","#990000","#660000"];
+
                   div.selectAll(".horizon")
                       .data(examples)
                     .enter().append("div")
                       .attr("class", "horizon")
                       .call(context.horizon()
-                            .extent([0, 150])
+                            .extent([0, 200])
                             .height(50)
-                            .colors(["#ffccff","#ff99ff","#ff66ff","#ff00ff","#ff0099","#cc0099","#990066","#660066","#666699","#ccccff","#9999ff","#9966ff","#9933ff","#9900cc","#663399","#660099","#330066","#9999cc","#99ccff","#66ccff","#3399ff","#3366ff","#0000ff","#0000cc","#000099","#000066","#cccc99","#ccffff","#99ffff","#00ffff","#00ccff","#0099ff","#0066ff","#0033ff","#003399","#cccccc","#99ffcc","#66ffcc","#66cccc","#00cccc","#009999","#006666","#336666","#003333","#ccffcc","#99ff99","#66ff66","#00ff00","#00cc00","#009900","#006600","#003300","#ffffcc","#ffff99","#ffff66","#ffff33","#ffff00","#ffcc00","#cc9900","#996633","#ffcc99","#ff9966","#ff6633","#ff6600","#ff3300","#cc3300","#993300","#663300","#ffcccc","#ff9999","#ff6666","#cc3333","#ff0000","#cc0000","#990000","#660000"])
+                            .colors(colors)
                         );
 
                   div.append("div")
