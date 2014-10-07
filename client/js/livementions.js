@@ -85,7 +85,10 @@ angular.module('ng-livementions', ['btford.socket-io'])
                       .data(examples)
                     .enter().append("div")
                       .attr("class", "horizon")
-                      .call(context.horizon().extent([-20, 20]));
+                      .call(context.horizon()
+                            .extent([-50, 50])
+                            .height(50)
+                        );
 
                   div.append("div")
                       .attr("class", "rule")
@@ -95,10 +98,12 @@ angular.module('ng-livementions', ['btford.socket-io'])
 
 
                 // On mousemove, reposition the chart values to match the rule.
+                /*
                 context.on("focus", function(i) {
                   d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
                   d3.selectAll(".value").style("padding-left", "5px");
                 });
+                */
 
                 // resolves on connection
                 //console.log("mysocket", mysocket);

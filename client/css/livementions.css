@@ -1,3 +1,6 @@
 .livementions {
     width: 100%;
 }
+.horizon .value {
+    padding-left: 5px;
+}
