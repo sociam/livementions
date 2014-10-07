@@ -22,3 +22,28 @@
 .horizon .value {
     padding-left: 5px;
 }
+
+.tweets {
+    max-height: 200px;
+    overflow: scroll;
+}
+
+.tweet {
+    float: left;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.02);
+    margin: 5px;
+    max-width: 400px;
+}
+.tweet .tw-user {
+    font-weight: bold;
+}
+.tweet .tw-username {
+    color: #777;
+    font-size: 85%;
+}
+.tweet .tw-text {
+    font-size: 110%;
+}

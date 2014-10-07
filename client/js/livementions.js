@@ -18,6 +18,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
             controller:function($scope, $element) { 
 
                 $scope.countries = {};
+                $scope.tweets = [];
 
                 var size = 960;
 
@@ -118,6 +119,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
                 //console.log("mysocket", mysocket);
                 mysocket.addListener("data", function (data) {
                     //console.log("data", data);
+                    $scope.tweets.unshift(data.data);
                     counts[data.alexaitem.Alexa_URL]++;
                     try {
                         var country = data.data.lang;
