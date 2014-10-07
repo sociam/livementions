@@ -4,3 +4,15 @@
 .horizon .value {
     padding-left: 5px;
 }
+.country {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 3px;
+}
+.country .name {
+    
+}
+.country .count {
+    color: #33f;
+}

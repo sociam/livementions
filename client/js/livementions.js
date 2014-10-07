@@ -4,7 +4,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
     }).run(function() {
         //console.log("ng-livementions run");
     }).factory('mysocket', function (socketFactory) {
-        var myIoSocket = io.connect('http://localhost:3000/');
+        var myIoSocket = io.connect('https://public.indx.ecs.soton.ac.uk:443/');
         var socket = socketFactory({
             ioSocket: myIoSocket
         });
@@ -16,6 +16,8 @@ angular.module('ng-livementions', ['btford.socket-io'])
             replace:true,
             templateUrl: 'tmpl/livementions.html',
             controller:function($scope, $element) { 
+
+                $scope.countries = {};
 
                 var size = 960;
 
@@ -75,7 +77,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
                     }
                 }).filter(function (a) { return a; }); // removes the falses
 
-                d3.select($element[0]).call(function(div) {
+                d3.select(jQuery($element[0]).find(".visual")[0]).call(function(div) {
 
                   div.append("div")
                       .attr("class", "axis")
@@ -111,6 +113,15 @@ angular.module('ng-livementions', ['btford.socket-io'])
                 mysocket.addListener("data", function (data) {
                     //console.log("data", data);
                     counts[data.alexaitem.Alexa_URL]++;
+                    try {
+                        var country = data.data.lang;
+                        if (!(country in $scope.countries)) {
+                            $scope.countries[country] = {"id": country, "name": country, "checked": true, "count": 0};
+                        }
+                        $scope.countries[country]['count'] ++;
+                    } catch (e) {
+                        // in case country isn't in tweet (NBD)
+                    }
                 });
             }
         };

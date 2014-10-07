@@ -1,3 +1,13 @@
 <div class="livementions">
 
+    <div class="countries">
+        <span ng-repeat="(countrycode, country) in countries" class="country">
+<!--            <input ng-attr-id="country.id" type="checkbox" ng-checked="country.checked" /><label ng-attr-for="country.id" ng-bind="country.name"></label> (<span ng-bind="country.count"></span>)
+-->
+            <span ng-bind="country.name" class="name"></span> (<span ng-bind="country.count" class="count"></span>)
+        </span>
+    </div>
+
+    <div class="visual"></div>
+
 </div>
