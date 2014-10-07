@@ -10,7 +10,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
         });
         //console.log("socket", socket);
         return socket;
-    }).directive('livemention', function(mysocket) { 
+    }).directive('livemention', function(mysocket, $sce) { 
         return {
             restrict:'E',
             replace:true,
@@ -119,7 +119,12 @@ angular.module('ng-livementions', ['btford.socket-io'])
                 //console.log("mysocket", mysocket);
                 mysocket.addListener("data", function (data) {
                     //console.log("data", data);
+                    //data.data.safe_thumb = $sce.trustAsResourceUrl(data.data.user.profile_image_url_http);
+                    data.data.safe_thumb = $sce.trustAsResourceUrl(data.data.user.profile_image_url);
                     $scope.tweets.unshift(data.data);
+                    if ($scope.tweets.length > 25) {
+                        $scope.tweets.pop();
+                    }
                     counts[data.alexaitem.Alexa_URL]++;
                     try {
                         var country = data.data.lang;
