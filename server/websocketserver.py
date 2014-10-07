@@ -1,32 +1,56 @@
 '''
-Created on 6 Oct 2014
+Created on 7 Oct 2014
 
 @author: petros
 '''
-#from twisted.internet  import reactor, protocol, defer
-from autobahn.twisted.websocket import WebSocketServerProtocol, WebSocketServerFactory
+from autobahn.twisted.websocket import WebSocketServerProtocol, \
+                                       WebSocketServerFactory
 
-class MyServerProtocol(WebSocketServerProtocol):
-    def onConnect(self, request):
-        print("Client connecting: {0}".format(request.peer))
+import json
+from twisted.internet.defer import Deferred, \
+                                   inlineCallbacks, \
+                                   returnValue
+from twitterauth import *
+
+def sleep(delay):
+    d = Deferred()
+    reactor.callLater(delay, d.callback, None)
+    return d
+
+
+class SMServerProtocol(WebSocketServerProtocol):
+
+    #def onConnect(self, request):
     def onOpen(self):
-        print("WebSocket connection open.")
-    def onMessage(self, payload, isBinary):
-        if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
-        else:
-            print("Text message received: {0}".format(payload.decode('utf8')))
-            ## echo back message verbatim
-            self.sendMessage(payload, isBinary)
-    def onClose(self, wasClean, code, reason):
-        print("WebSocket connection closed: {0}".format(reason))
+        reactor.callLater(1,self.startStreaming)
     
+    def startStreaming(self):
+        auth = TwitterAuth()
+        openstream = auth.getStream()
+        i=0
+        for item in openstream:
+            if i > 4:
+                break
+            i = i+1
+            #check connection lost!
+            tweetstr = json.dumps(item).encode('utf8')
+            print (tweetstr)
+            self.sendMessage(tweetstr)
+        print("All done!")
+        self.sendClose(1000)
+
+        
 if __name__ == '__main__':
+
     import sys
+
     from twisted.python import log
     from twisted.internet import reactor
+
     log.startLogging(sys.stdout)
-    factory = WebSocketServerFactory("ws://localhost:1234", debug = False)
-    factory.protocol = MyServerProtocol
+
+    factory = WebSocketServerFactory("ws://localhost:1234")
+    factory.protocol = SMServerProtocol
+
     reactor.listenTCP(1234, factory)
     reactor.run()
