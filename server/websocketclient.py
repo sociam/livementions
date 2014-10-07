@@ -4,35 +4,39 @@ Created on 6 Oct 2014
 @author: petros
 '''
 
-from autobahn.twisted.websocket import WebSocketClientProtocol, WebSocketClientFactory
+from autobahn.twisted.websocket import WebSocketClientProtocol, \
+                                       WebSocketClientFactory
 
-class MyClientProtocol(WebSocketClientProtocol):
-    def onConnect(self, response):
-        print("Server connected: {0}".format(response.peer))
-    def onOpen(self):
-        print("WebSocket connection open.")
-    def hello(self):
-        self.sendMessage(u"Hello, world!".encode('utf8'))
-        self.sendMessage(b"\x00\x01\x03\x04", isBinary = True)
-        self.factory.reactor.callLater(1, self.hello)
-        ## start sending messages every second ..
-    hello()
+import json, random
+
+
+class SlowSquareClientProtocol(WebSocketClientProtocol):
 
     def onMessage(self, payload, isBinary):
-        if isBinary:
-            print("Binary message received: {0} bytes".format(len(payload)))
-        else:
-            print("Text message received: {0}".format(payload.decode('utf8')))
+        print ("Message received!")
+        if not isBinary:
+            res = json.loads(payload.decode('utf8'))
+            print("Result received: {}".format(res))
+            #self.sendClose()
 
     def onClose(self, wasClean, code, reason):
-        print("WebSocket connection closed: {0}".format(reason))
+        if reason:
+            print(reason)
+        reactor.stop()
+
+
 
 if __name__ == '__main__':
+
     import sys
-    from twisted.python import log  
+
+    from twisted.python import log
     from twisted.internet import reactor
+
     log.startLogging(sys.stdout)
+
     factory = WebSocketClientFactory("ws://localhost:1234", debug = False)
-    factory.protocol = MyClientProtocol
+    factory.protocol = SlowSquareClientProtocol
+
     reactor.connectTCP("127.0.0.1", 1234, factory)
     reactor.run()
