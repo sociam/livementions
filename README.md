@@ -1,5 +1,5 @@
 # SOCIAM Livementions Demonstrator
-============
+
 
 Exemplar realtime visualisation of mentions of social machines from the Twitter sample stream.
 
