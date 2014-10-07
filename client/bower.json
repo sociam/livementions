@@ -16,8 +16,8 @@
     "tests"
   ],
   "dependencies": {
-    "angularjs": "~1.2.26",
-    "jquery": "~2.1.1",
-    "underscore": "~1.7.0"
+    "angular-socket-io": "~0.6.0",
+    "cubism": "~1.6.0",
+    "d3": "~3.4.11"
   }
 }

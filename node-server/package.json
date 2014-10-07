@@ -1,0 +1,16 @@
+{
+  "name": "livementions-server",
+  "version": "1.0.0",
+  "description": "livementions server",
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "^1.1.0",
+    "twitter": "^0.2.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Alexander Smith <daniel@danielsmith.eu> (https://danielsmith.eu/)",
+  "license": "ISC"
+}

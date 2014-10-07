@@ -15,11 +15,18 @@
         <link rel="stylesheet" href="css/livementions.css">
     </head>
     <body ng-app="ng-livementions" ng-controller="main">
-        <livemention src="ws://localhost/"></livemention>
+        <h1>Realtime Mentions of Top Social Machines</h1>
+
+        <livemention></livemention>
+
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="bower_components/underscore/underscore-min.js"></script>
+        <script src="bower_components/socket.io-client/socket.io.js"></script>
         <script src="bower_components/angularjs/angular.min.js"></script>
+        <script src="bower_components/angular-socket-io/socket.min.js"></script>
         <script src="bower_components/d3/d3.min.js"></script>
+        <script src="bower_components/cubism/cubism.v1.min.js"></script>
+        <script src="js/Alexa100.js"></script>
         <script src="js/livementions.js"></script>
     </body>
 </html>
