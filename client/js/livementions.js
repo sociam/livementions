@@ -1,98 +1,116 @@
-angular.module('ng-livementions', []) 
-	.controller('main', function($scope, $rootScope) { 
-        console.log("ng-livementions main");
-	}).run(function() {
-        console.log("ng-livementions run");
-    }).directive('livemention', function() { 
+angular.module('ng-livementions', ['btford.socket-io']) 
+    .controller('main', function($scope, $rootScope) { 
+        //console.log("ng-livementions main");
+    }).run(function() {
+        //console.log("ng-livementions run");
+    }).factory('mysocket', function (socketFactory) {
+        var myIoSocket = io.connect('http://localhost:3000/');
+        var socket = socketFactory({
+            ioSocket: myIoSocket
+        });
+        //console.log("socket", socket);
+        return socket;
+    }).directive('livemention', function(mysocket) { 
         return {
             restrict:'E',
-//            scope:{wssrc:'='},
             replace:true,
             templateUrl: 'tmpl/livementions.html',
             controller:function($scope, $element) { 
 
-                $scope.src = $element.attr("src");
-                console.log("livementions src:", $scope.src);
+                var size = 960;
 
-                var width = jQuery(document).width();
-                var height = jQuery(document).height();
+                var avalues = {};
+                var counts = {};
+                alexa.map(function (aitem) {
+                    counts[aitem.Alexa_URL] = 0;
+                    avalues[aitem.Alexa_URL] = [];
+                    while (avalues[aitem.Alexa_URL].length < size) {
+                        avalues[aitem.Alexa_URL].push(0);
+                    }
+                });
 
-                /*
-                var width = 960,
-                    height = 500;
+                function random(name) {
+                  var value = 0,
+                      values = [],
+                      i = 0,
+                      last;
+                  return context.metric(function(start, stop, step, callback) {
+
+                    
+                    start = +start, stop = +stop;
+                    if (isNaN(last)) last = start;
+
+                    /*
+                    while (last < stop) {
+                      last += step;
+                      value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
+                      values.push(value);
+                    }
+
+                    var dataslice = values.slice((start - stop) / step);
+                    console.log("dataslice", dataslice);
+                    callback(null, values = dataslice);
                     */
+                    
+                    avalues[name].shift();
+                    avalues[name].push(counts[name]);
 
-                var n = 20, // number of layers
-                    m = 200, // number of samples per layer
-                    stack = d3.layout.stack().offset("wiggle"),
-                    layers0 = stack(d3.range(n).map(function() { return bumpLayer(m); })),
-                    layers1 = stack(d3.range(n).map(function() { return bumpLayer(m); }));
-
-                var x = d3.scale.linear()
-                    .domain([0, m - 1])
-                    .range([0, width]);
-
-                var y = d3.scale.linear()
-                    .domain([0, d3.max(layers0.concat(layers1), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
-                    .range([height, 0]);
-
-                var color = d3.scale.linear()
-                    .range(["#aad", "#556"]);
-
-                var area = d3.svg.area()
-                    .x(function(d) { return x(d.x); })
-                    .y0(function(d) { return y(d.y0); })
-                    .y1(function(d) { return y(d.y0 + d.y); });
-
-                var svg = d3.select($element[0]).append("svg")
-                    .attr("width", width)
-                    .attr("height", height);
-
-                svg.selectAll("path")
-                    .data(layers0)
-                  .enter().append("path")
-                    .attr("d", area)
-                    .style("fill", function() { return color(Math.random()); });
-
-                function transition() {
-                  d3.selectAll("path")
-                      .data(function() {
-                        var d = layers1;
-                        layers1 = layers0;
-                        return layers0 = d;
-                      })
-                    .transition()
-                      .duration(2500)
-                      .attr("d", area);
+                    //console.log("counts", counts[name]);
+                    //console.log("vals", avalues[name]);
+                    callback(null, values = avalues[name].slice((start - stop) / step));
+                  }, name);
                 }
 
-                // Inspired by Lee Byron's test data generator.
-                function bumpLayer(n) {
+                var context = cubism.context()
+                    .serverDelay(0)
+                    .clientDelay(0)
+                    .step(1e3)
+                    .size(size);
 
-                  function bump(a) {
-                    var x = 1 / (.1 + Math.random()),
-                        y = 2 * Math.random() - .5,
-                        z = 10 / (.1 + Math.random());
-                    for (var i = 0; i < n; i++) {
-                      var w = (i / n - y) * z;
-                      a[i] += x * Math.exp(-w * w);
+                var examples = alexa.map(function (aitem) {
+                    if (aitem.Soc_Mac == "Y"){
+                        return random(aitem.Alexa_URL);
+                    } else {
+                        return false; // marks as false
                     }
-                  }
+                }).filter(function (a) { return a; }); // removes the falses
 
-                  var a = [], i;
-                  for (i = 0; i < n; ++i) a[i] = 0;
-                  for (i = 0; i < 5; ++i) bump(a);
-                  return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
-                }
+                d3.select($element[0]).call(function(div) {
+
+                  div.append("div")
+                      .attr("class", "axis")
+                      .call(context.axis().orient("top"));
+
+                  div.selectAll(".horizon")
+                      .data(examples)
+                    .enter().append("div")
+                      .attr("class", "horizon")
+                      .call(context.horizon()
+                            .extent([-50, 50])
+                            .height(50)
+                        );
+
+                  div.append("div")
+                      .attr("class", "rule")
+                      .call(context.rule());
+
+                });
 
 
-                var doAutoChange = function () {
-                    transition();
-                    if (!window.cancel) {
-                        setTimeout(doAutoChange, 2500);
-                    }
-                };
-                doAutoChange();
+                // On mousemove, reposition the chart values to match the rule.
+                /*
+                context.on("focus", function(i) {
+                  d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+                  d3.selectAll(".value").style("padding-left", "5px");
+                });
+                */
+
+                // resolves on connection
+                //console.log("mysocket", mysocket);
+                mysocket.addListener("data", function (data) {
+                    //console.log("data", data);
+                    counts[data.alexaitem.Alexa_URL]++;
+                });
             }
         };
     });
