@@ -10,7 +10,7 @@
 
     <div class="tweets">
         <div class="tweet" ng-repeat="t in tweets">
-            <div class="tw-user"><img ng-attr-src="t.user.profile_image_url_https" /><span class="tw-name" ng-bind="t.user.name"></span><span class="tw-username">@<span ng-bind="t.user.screen_name"></span></span></div>
+            <div class="tw-user"><img ng-src="{{t.user.profile_image_url_https}}" /><span class="tw-name" ng-bind="t.user.name"></span><span class="tw-username">@<span ng-bind="t.user.screen_name"></span></span></div>
             <div class="tw-text" ng-bind="t.text"></div>
         </div>
     </div>
