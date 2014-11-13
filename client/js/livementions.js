@@ -4,7 +4,8 @@ angular.module('ng-livementions', ['btford.socket-io'])
     }).run(function() {
         //console.log("ng-livementions run");
     }).factory('mysocket', function (socketFactory) {
-        var myIoSocket = io.connect('https://public.indx.ecs.soton.ac.uk:443/');
+        //var myIoSocket = io.connect('https://public.indx.ecs.soton.ac.uk:443/');
+        var myIoSocket = io.connect('http://localhost:3000/');
         var socket = socketFactory({
             ioSocket: myIoSocket
         });
@@ -120,7 +121,7 @@ angular.module('ng-livementions', ['btford.socket-io'])
                 mysocket.addListener("data", function (data) {
                     //console.log("data", data);
                     //data.data.safe_thumb = $sce.trustAsResourceUrl(data.data.user.profile_image_url_http);
-                    data.data.safe_thumb = $sce.trustAsResourceUrl(data.data.user.profile_image_url);
+                    //data.data.safe_thumb = $sce.trustAsResourceUrl(data.data.user.profile_image_url);
                     $scope.tweets.unshift(data.data);
                     if ($scope.tweets.length > 25) {
                         $scope.tweets.pop();

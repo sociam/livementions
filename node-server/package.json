@@ -5,7 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "socket.io": "^1.1.0",
-    "twitter": "^0.2.12"
+    "twitter": "^0.2.12",
+    "amqp": "~0.2.0"
   },
   "devDependencies": {},
   "scripts": {
